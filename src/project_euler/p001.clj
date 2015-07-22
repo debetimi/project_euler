@@ -1,10 +1,5 @@
 (ns project-euler.p001)
 
-(defn mult 
-  "Returns the multiplicity of n for a given divisor"
-  [n divisor]
-  (long (Math/floor (/ n divisor))))
-
 (defn evenly-spaced-series-sum
   "Returns the sum of evenly spaced series that starts at 0"
   [spacing n]
@@ -17,9 +12,9 @@
    Find the sum of all the multiples of 3 or 5 below 1000."
   [n]
   (let [n (dec n)
-        mult3 (mult n 3) 
-        mult5 (mult n 5) 
-        mult15 (mult n 15)]
+        mult3 (quot n 3) 
+        mult5 (quot n 5) 
+        mult15 (quot n 15)]
     (long (+' (evenly-spaced-series-sum 3 mult3) 
               (evenly-spaced-series-sum 5 mult5) 
               (- (evenly-spaced-series-sum 15 mult15))))))
