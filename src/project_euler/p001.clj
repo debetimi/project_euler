@@ -22,7 +22,7 @@
         mult15 (mult n 15)]
     (long (+' (evenly-spaced-series-sum 3 mult3) 
               (evenly-spaced-series-sum 5 mult5) 
-              (evenly-spaced-series-sum 15 mult15)))))
+              (- (evenly-spaced-series-sum 15 mult15))))))
 
 (defn -main
   "Main function for Hackerrank Code"
