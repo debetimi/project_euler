@@ -5,14 +5,14 @@
 ;;; How many such routes are there through a 20×20 grid?
 
 (defn lattice-paths
-  "Finds the number of lattice paths"
-  ([] (lattice-paths [20 20]))
-  ([dim]
-   (let [paths (atom {})]
-     (dotimes [i (inc (first dim))] 
-       (dotimes [j (inc (second dim))] 
-         (let [weight (cond
-                        (= [0 0] [i j]) 1N
-                        :else (+ (get @paths [(dec i) j] 0) (get @paths [i (dec j)] 0)))]
-           (swap! paths assoc [i j] weight))))
-     (get @paths dim))))
+  "Finds the number of lattice paths for the given dimensions"
+  [dim]
+  (let [paths (atom {})]
+    (dotimes [y (inc (second dim))] 
+      (dotimes [x (inc (first dim))] 
+        (let [coords [x y]
+              weight (cond
+                       (= [0 0] coords) 1N
+                       :else (+ (get @paths [(dec x) y] 0) (get @paths [x (dec y)] 0)))]
+          (swap! paths assoc coords weight))))
+    (get @paths dim)))
