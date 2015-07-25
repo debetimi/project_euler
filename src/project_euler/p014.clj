@@ -10,27 +10,26 @@
 ;;; Which starting number, under one million, produces the longest chain?
 ;; NOTE: Once the chain starts the terms are allowed to go above one million.
 
-(def cache (atom {}))
-
 (defn len-collatz
   "Calculates the length of a collatz series starting at n"
-  [n]
-  (if (contains? @cache n) 
-    (get @cache n)
-    (let [v (cond 
-              (= 1 n) 1
-              (even? n) (+ 1 (len-collatz (/ n 2)))
-              :else (+ 2 (len-collatz (/ (+ 1 (* 3 n)) 2))))]
-      (swap! cache assoc n v)
-      v))) 
+  [n cache]
+  (if-not (contains? cache 1)
+    (swap! cache assoc 1 1))
+  (loop [i n acc 0]
+    (if-let [v (get @cache i)]
+      (get (swap! cache assoc n (+ acc v)) n)
+      (if (even? i)
+        (recur (/ i 2) (inc acc))
+        (recur (+ (* 3 i) 1) (inc acc))))))
 
 (defn longest-collatz
   "Returns number that produces longest collatz series in the range [1 max-seed]"
   [max-seed]
-  (let [max-len (atom -1)
+  (let [cache (atom {})
+        max-len (atom -1)
         max-n (atom -1)]
     (doseq [n (range 1 (inc max-seed))]
-      (let [len (len-collatz n)]
+      (let [len (len-collatz n cache)]
         (when (> len @max-len) 
           (reset! max-len len)
           (reset! max-n n))))
