@@ -16,3 +16,7 @@
                        :else (+ (get @paths [(dec x) y] 0) (get @paths [x (dec y)] 0)))]
           (swap! paths assoc coords weight))))
     (get @paths dim)))
+
+(defn- solve
+  []
+  (lattice-paths [20 20])) 

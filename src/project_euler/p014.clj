@@ -29,3 +29,7 @@
     (dotimes [n max-seed]
       (len-collatz (inc n) cache))
     (apply max-key val @cache))) 
+
+(defn- solve
+  []
+  (longest-collatz 1000000))
