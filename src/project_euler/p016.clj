@@ -6,8 +6,7 @@
 
 (defn power-digit-sum
   [a n]
- (let [value (bigint (math/expt a  n))]
-   (apply + (map (comp read-string str) (str value))))) 
+  (apply + (map (comp read-string str) (str (math/expt a n))))) 
 
 (defn- solve
   []
