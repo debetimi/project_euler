@@ -20,7 +20,7 @@
       (get (swap! cache assoc n (+ acc v)) n)
       (if (even? i)
         (recur (/ i 2) (inc acc))
-        (recur (/ (+ (* 3 i) 1) 2) (+ acc 2))))))
+        (recur (+ (* 3 i) 1) (inc acc))))))
 
 (defn longest-collatz
   "Returns seed and length of the longest collatz series in the range [1 max-seed]"
