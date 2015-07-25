@@ -13,7 +13,7 @@
 (defn len-collatz
   "Calculates the length of a collatz series starting at n"
   [n cache]
-  (if-not (contains? cache 1)
+  (if-not (contains? @cache 1)
     (swap! cache assoc 1 1))
   (loop [i n acc 0]
     (if-let [v (get @cache i)]
@@ -23,14 +23,9 @@
         (recur (+ (* 3 i) 1) (inc acc))))))
 
 (defn longest-collatz
-  "Returns number that produces longest collatz series in the range [1 max-seed]"
+  "Returns seed and length of the longest collatz series in the range [1 max-seed]"
   [max-seed]
-  (let [cache (atom {})
-        max-len (atom -1)
-        max-n (atom -1)]
-    (doseq [n (range 1 (inc max-seed))]
-      (let [len (len-collatz n cache)]
-        (when (> len @max-len) 
-          (reset! max-len len)
-          (reset! max-n n))))
-    @max-n)) 
+  (let [cache (atom {})]
+    (dotimes [n max-seed]
+      (len-collatz (inc n) cache))
+    (apply max-key val @cache))) 
