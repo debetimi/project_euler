@@ -6,12 +6,13 @@
 
 (defn lattice-paths
   "Finds the number of lattice paths"
-  [dim]
-  (let [paths (atom {})]
-    (dotimes [i (inc (first dim))] 
-      (dotimes [j (inc (second dim))] 
-        (let [weight (cond
-                       (= [0 0] [i j]) 1
-                       :else (+ (get @paths [(dec i) j] 0) (get @paths [i (dec j)] 0)))]
-          (swap! paths assoc [i j] weight))))
-    (get @paths dim)))
+  ([] (lattice-paths [20 20]))
+  ([dim]
+   (let [paths (atom {})]
+     (dotimes [i (inc (first dim))] 
+       (dotimes [j (inc (second dim))] 
+         (let [weight (cond
+                        (= [0 0] [i j]) 1N
+                        :else (+ (get @paths [(dec i) j] 0) (get @paths [i (dec j)] 0)))]
+           (swap! paths assoc [i j] weight))))
+     (get @paths dim))))
