@@ -7,11 +7,11 @@
 (defn fib
   ([] (fib 1 1))
   ([a b]
-  (cons a (lazy-seq (fib b (+ a b))))))
+  (cons a (lazy-seq (fib b (+' a b))))))
 
 (defn sum-of-even-fib-values-less-than-n
   [n]
-  (reduce + (filter even? (take-while (partial > n) (fib)))))
+  (reduce +' (filter even? (take-while (partial > n) (fib)))))
 
 (defn- solve 
   []
