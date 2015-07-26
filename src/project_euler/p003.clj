@@ -5,14 +5,17 @@
 
 ;;; What is the largest prime factor of the number 600851475143 ?
 
+(defn prime?  [n]
+  (.isProbablePrime  (BigInteger/valueOf n) 5))
+
 (defn prime-factors
   [number]
   (loop [n number f 2 pfacts '()]
     (if (= 1 n) 
-     pfacts 
+      pfacts 
       (let [m (loop [i n]
                 (if-not (zero? (rem i f)) 
-                 i 
+                  i 
                   (recur (/ i f))))]
         (recur m (inc f) (if (= m n) 
                            pfacts 
