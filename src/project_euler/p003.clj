@@ -9,12 +9,14 @@
   [number]
   (loop [n number f 2 pfacts '()]
     (if (= 1 n) 
-      pfacts
+     pfacts 
       (let [m (loop [i n]
-                (if (zero? (rem i f))
-                  (recur (/ i f))
-                  i))]
-        (recur m (inc f) (if (= m n) pfacts (conj pfacts f)))))))
+                (if-not (zero? (rem i f)) 
+                 i 
+                  (recur (/ i f))))]
+        (recur m (inc f) (if (= m n) 
+                           pfacts 
+                           (conj pfacts f)))))))
 
 (defn- solve 
   []
