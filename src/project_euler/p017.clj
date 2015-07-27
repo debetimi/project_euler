@@ -1,12 +1,13 @@
 (ns project-euler.p017
   (:require [clojure.string :as s]))
 
-(def singles {:0 "" :1 "one" :2 "two" :3 "three" :4 "four" :5 "five" :6 "six" :7 "seven" :8 "eight" :9 "nine"})
-(def teens {:0 "ten" :1 "eleven" :2 "twelve" :3 "thirteen" :4 "fourteen" :5 "fifteen" :6 "sixteen" :7 "seventeen" :8 "eighteen" :9 "nineteen"})
-(def tens {:0 "" :1 "" :2 "twenty" :3 "thirty" :4 "forty" :5 "fifty" :6 "sixty" :7 "seventy" :8 "eighty" :9 "ninety"})
+(def singles {0 "" 1 "one" 2 "two" 3 "three" 4 "four" 5 "five" 6 "six" 7 "seven" 8 "eight" 9 "nine"})
+(def teens {0 "ten" 1 "eleven" 2 "twelve" 3 "thirteen" 4 "fourteen" 5 "fifteen" 6 "sixteen" 7 "seventeen" 8 "eighteen" 9 "nineteen"})
+(def tens {0 "" 1 "" 2 "twenty" 3 "thirty" 4 "forty" 5 "fifty" 6 "sixty" 7 "seventy" 8 "eighty" 9 "ninety"})
 
 (def periods ["" "thousand" "million" "billion" "trillion"])
 (def inner-suffixes ["hundred"])
+(def inner-prefixes ["" "and" "and"])
 (def order (cycle [singles tens]))
 
 
@@ -17,14 +18,14 @@
   (let [size (count period)
         words (take size (drop (dec size) order))
         suffixes (drop (- 3 size) inner-suffixes)] 
-    (loop [digits (reverse period) words words period-rep "" suffixes suffixes prefix ""] 
+    (loop [digits (reverse (map (comp read-string str) period)) words words period-rep "" suffixes suffixes prefix ""] 
       (if (empty? digits) 
         period-rep
-        (let [kw (keyword (str (first digits)))
-              word (kw (first words))
+        (let [digit (first digits)
+              word (get (first words) digit)
               suffix (if-not (empty? word) (str (first suffixes)) "")]
           (recur (rest digits) 
-                 (if-not (and (not= :0 kw) (empty? word))
+                 (if-not (and (not (zero? digit)) (empty? word))
                    (rest words) 
                    (list teens)) 
                  (str period-rep (if-not (empty? word) prefix "") word suffix)
@@ -48,5 +49,5 @@
   ([start fin] 
    (map num-to-word (range start fin)))) 
 
-(defn- solve []
-  (reduce + (map count (range-english 1 1001))))
+(defn- solve [n]
+  (reduce + (map count (range-english 1 (inc n)))))
