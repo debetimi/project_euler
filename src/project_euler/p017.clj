@@ -9,7 +9,6 @@
 (def inner-suffixes ["hundred" "" ""])
 (def order (cycle [singles tens]))
 
-
 (defn num-to-word
   [number]
   (let [partitioned-number (partition 3 3 [] (s/reverse (str number)))]
@@ -32,9 +31,8 @@
                                           (list teens)) 
                                         (str period-rep (if-not (empty? word) prefix "") word suffix)
                                         (rest suffixes)
-                                        (if-not (empty? suffix) "and" (if-not  (empty? word) "" prefix)))))))]
-          (recur (rest periods) (str period-rep (first suffixes) str-rep) (rest suffixes)))))))
-
+                                        (if-not (empty? suffix) "and" (if-not (empty? word) "" prefix)))))))]
+          (recur (rest periods) (str period-rep (if-not (empty? period-rep) (first suffixes) "") str-rep) (rest suffixes)))))))
 
 (defn range-english
   "returns string representation of integer values in range
