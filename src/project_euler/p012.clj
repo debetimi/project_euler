@@ -30,8 +30,6 @@
               (cons curr-sum (lazy-seq (triangle curr-sum (inc n))))))]
     (triangle 0 1)))
 
-
-
 (defn solve 
   [n]
   (first (drop-while #(> n (count-factors %)) triangle-numbers)))
