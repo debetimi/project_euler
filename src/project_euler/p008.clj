@@ -47,4 +47,8 @@
                      "05886116467109405077541002256983155200055935729725"
                      "71636269561882670428252483600823257530420752963450")) 
 
-(defn solve [] (apply max (map (comp (partial apply *') (partial map (comp read-string str))) (partition 13 1  big-num))))
+(defn solve 
+  ([]
+   (solve 13))
+  ([n] 
+  (apply max (map (comp (partial apply *') (partial map (comp read-string str))) (partition n 1  big-num)))))
