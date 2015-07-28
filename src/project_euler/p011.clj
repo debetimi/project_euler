@@ -56,20 +56,20 @@
         (swap! temp assoc [(first col) (first row)] (second col))))
     @temp))
 
-(defn right [coord] [(inc (first coord)) (second coord)])
+(defn move-right [coord] [(inc (first coord)) (second coord)])
 
-(defn down [coord] [(first coord) (inc (second coord))])
+(defn move-down [coord] [(first coord) (inc (second coord))])
 
-(defn right-diag [coord] (into [] (map inc coord)))
+(defn move-right-diag [coord] (into [] (map inc coord)))
 
-(defn left-diag [coord] [(dec (first coord)) (inc (second coord))])
+(defn move-left-diag [coord] [(dec (first coord)) (inc (second coord))])
 
 (defn greatest-product
   "returns the greatest product of n adjacent coords for a given starting coord"
   [n coord]
-  (letfn [(coord-val [dir-func] 
-            (reduce * (map #(get coord->value % 0) (take n (iterate dir-func coord)))))]
-    (apply max (map coord-val [right down right-diag left-diag]))))
+  (letfn [(dir->val [dir] 
+            (reduce * (map #(get coord->value % 0) (take n (iterate dir coord)))))]
+    (apply max (map dir->val [move-right move-down move-right-diag move-left-diag]))))
 
 (defn solve
   []
