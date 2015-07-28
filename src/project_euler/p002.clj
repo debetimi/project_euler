@@ -4,14 +4,15 @@
 ;;; 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, ...
 ;;; By considering the terms in the Fibonacci sequence whose values do not exceed four million, find the sum of the even-valued terms.
 
-(defn fib
-  ([] (fib 1 1))
-  ([a b]
-  (cons a (lazy-seq (fib b (+' a b))))))
+;; infinite fibonnaci lazy sequence
+(def fibonacci
+  (letfn [(fib [a b]
+            (cons a (lazy-seq (fib b (+' a b)))))]
+    (fib 0 1)))
 
 (defn sum-of-even-fib-values-less-than-n
   [n]
-  (reduce +' (filter even? (take-while (partial > n) (fib)))))
+  (reduce +' (filter even? (take-while (partial > n) fibonacci))))
 
 (defn solve 
   []
