@@ -10,13 +10,10 @@
   (loop [n number f 2 pfacts '()]
     (if (= 1 n) 
       pfacts 
-      (let [m (loop [i n]
-                (if-not (zero? (rem i f)) 
-                  i 
-                  (recur (/ i f))))]
-        (recur m (inc f) (if (= m n) 
-                           pfacts 
-                           (conj pfacts f)))))))
+      (let [divisible? (zero? (rem n f))]
+        (recur (if divisible? (/ n f) n) 
+               (if divisible? f (inc f)) 
+               (if divisible? (conj pfacts f) pfacts))))))
 
 (defn solve 
   []
