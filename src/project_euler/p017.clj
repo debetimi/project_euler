@@ -49,5 +49,5 @@
   ([start fin] 
    (map num-to-word (range start fin)))) 
 
-(defn- solve [n]
+(defn solve [n]
   (reduce + (map count (range-english 1 (inc n)))))

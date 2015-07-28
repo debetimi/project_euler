@@ -18,6 +18,6 @@
                            pfacts 
                            (conj pfacts f)))))))
 
-(defn- solve 
+(defn solve 
   []
   (first (prime-factors 600851475143)))

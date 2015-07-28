@@ -17,6 +17,6 @@
           (swap! paths assoc coords weight))))
     (get @paths dim)))
 
-(defn- solve
+(defn solve
   []
   (lattice-paths [20 20])) 

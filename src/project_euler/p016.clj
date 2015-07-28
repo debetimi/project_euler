@@ -8,6 +8,6 @@
   [a n]
   (apply + (map (comp read-string str) (str (math/expt a n))))) 
 
-(defn- solve
+(defn solve
   []
   (power-digit-sum 2 1000))

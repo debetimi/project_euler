@@ -13,6 +13,6 @@
   [n]
   (reduce +' (filter even? (take-while (partial > n) (fib)))))
 
-(defn- solve 
+(defn solve 
   []
   (sum-of-even-fib-values-less-than-n 4000000))
