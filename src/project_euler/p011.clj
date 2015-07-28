@@ -56,23 +56,21 @@
         (swap! temp assoc [(first col) (first row)] (second col))))
     @temp))
 
-(defn right-coord [coord] [(inc (first coord)) (second coord)])
+(defn right [coord] [(inc (first coord)) (second coord)])
 
-(defn down-coord [coord] [(first coord) (inc (second coord))])
+(defn down [coord] [(first coord) (inc (second coord))])
 
-(defn right-diag-coord [coord] (into [] (map inc coord)))
+(defn right-diag [coord] (into [] (map inc coord)))
 
-(defn left-diag-coord [coord] [(dec (first coord)) (inc (second coord))])
+(defn left-diag [coord] [(dec (first coord)) (inc (second coord))])
 
 (defn greatest-product
-  "returns the greatest product for a given coord"
-  [coord]
-  (let [r (reduce * (map #(get coord->value % 0) (take 4 (iterate right-coord coord))))
-        d (reduce * (map #(get coord->value % 0) (take 4 (iterate down-coord coord))))
-        rd (reduce * (map #(get coord->value % 0) (take 4 (iterate right-diag-coord coord))))
-        ld (reduce * (map #(get coord->value % 0) (take 4 (iterate left-diag-coord coord))))]
-    (max r d rd ld)))
+  "returns the greatest product of n adjacent coords for a given starting coord"
+  [n coord]
+  (letfn [(coord-val [dir-func] 
+            (reduce * (map #(get coord->value % 0) (take n (iterate dir-func coord)))))]
+    (apply max (map coord-val [right down right-diag left-diag]))))
 
 (defn solve
   []
-  (apply max (map greatest-product (keys coord->value))))
+  (apply max (map (partial greatest-product 4) (keys coord->value))))
