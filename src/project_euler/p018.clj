@@ -62,12 +62,13 @@
   [str-row]
  (map (comp read-string remove-leading-zeros) (s/split str-row #" ")))
 
-(defn max-siblings
-  "Takes a list of integers and list of maximum child of each of those integers
-   in the tree and returns a list of the maximum of any pair of siblings"
-  [max-child row]
+(defn largest-stepwise-siblings
+  "Takes a list of siblings (integers on a same level of the tree) 
+   and list of largst childen of each of sibling 
+   returns a list of the maximum of any step-wise pair of sibling + largest-child"
+  [largest-children row]
   (if (not= 1 (count row)) 
-    (map (partial reduce max) (partition 2 1 (map + row max-child)))
-    (map + max-child row)))
+    (map (partial reduce max) (partition 2 1 (map + row largest-children)))
+    (map + largest-children row)))
 
-(defn solve [] (reduce max-siblings (repeat 0) (map str-row->int-row info)))
+(defn solve [] (reduce largest-stepwise-siblings (repeat 0) (map str-row->int-row info)))
