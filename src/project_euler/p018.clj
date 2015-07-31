@@ -28,7 +28,7 @@
 ;;; 63 66 04 68 89 53 67 30 73 16 69 87 40 31
 ;;; 04 62 98 27 23 09 70 98 73 93 38 53 60 04 23
 
-(def pyramid 
+(def pyramid-str-rep
 "75
 95 64
 17 47 82
@@ -46,11 +46,10 @@
 04 62 98 27 23 09 70 98 73 93 38 53 60 04 23")
 
 
-;; The above pyramid as a list of strings represent each row.
-;; starting from the bottom row to the top
-(def info (reverse (clojure.string/split pyramid #"\n")))
+;; The above pyramid as a list of strings representing each row.
+(def p18-pyramid (clojure.string/split pyramid-str-rep #"\n"))
 
-(defn- remove-leading-zeros 
+(defn remove-leading-zeros 
   "Since 09 is not a valid number in clojure, this helper function removes
    leading zeros from single digit numbers"
   [string]
@@ -71,4 +70,7 @@
     (map (partial reduce max) (partition 2 1 (map + row largest-children)))
     (map + largest-children row)))
 
-(defn solve [] (reduce largest-stepwise-siblings (repeat 0) (map str-row->int-row info)))
+(defn solve 
+  ([] (solve p18-pyramid))
+  ([pyramid] 
+  (reduce largest-stepwise-siblings (repeat 0) (map str-row->int-row (reverse pyramid)))))
