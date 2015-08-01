@@ -1,6 +1,5 @@
 (ns project-euler.p021
-  (:require [clojure.math.numeric-tower :as m]
-            [project-euler.p003 :as p003]))
+  (:require [project-euler.p003 :as p003]))
 
 ;;; Let d(n) be defined as the sum of proper divisors of n  (numbers less than n which divide evenly into n).
 ;;; If d(a) = b and d(b) = a, where a ≠ b, then a and b are an amicable pair and each of a and b are called amicable numbers.
@@ -12,16 +11,9 @@
 (def factors
   (memoize 
     (fn [number]
-      (let [prime-factors (p003/prime-factors number)
-            reducer (fn [x y]
-                      (concat x (map (partial * y) x)))]
-        (into (sorted-set) (reduce reducer [1] prime-factors))))))
+      (let [reducer (fn [x y] (concat x (map (partial * y) x)))]
+        (into (sorted-set) (reduce reducer [1] (p003/prime-factors number)))))))
 (def d (memoize (fn [x] (reduce +' (butlast (factors x))))))
 (def amicable? (fn [a] (and (not= a (d a)) (= a (d (d a)))))) 
 
 (defn solve [] (reduce + (take-while (partial > 10000) (filter amicable? (range)))))
-
-
-
-
-

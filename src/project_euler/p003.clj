@@ -5,11 +5,13 @@
 
 ;;; What is the largest prime factor of the number 600851475143 ?
 
+(defonce cache (atom {}))
+
 (defn prime-factors
   [number]
   (loop [n number f 2 pfacts '()]
-    (if (or (= n 0) (= 1 n)) 
-      pfacts 
+    (if (or (contains? @cache n) (= n 0) (= 1 n)) 
+      (get (swap! cache assoc number (concat pfacts (get @cache n))) number) 
       (let [divisible? (zero? (rem n f))]
         (recur (if divisible? (/ n f) n) 
                (if divisible? f (inc f)) 
