@@ -13,7 +13,7 @@
     (fn [number]
       (let [reducer (fn [x y] (concat x (map (partial * y) x)))]
         (into (sorted-set) (reduce reducer [1] (p003/prime-factors number)))))))
-(def d (memoize (fn [x] (reduce +' (butlast (factors x))))))
+(def d (memoize (fn [x] (reduce +' (conj (factors x) (- x))))))
 (def amicable? (fn [a] (and (not= a (d a)) (= a (d (d a)))))) 
 
-(defn solve [] (reduce + (take-while (partial > 10000) (filter amicable? (range)))))
+(defn solve [] (reduce + (filter amicable? (range 10000))))
