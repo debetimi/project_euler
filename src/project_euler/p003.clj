@@ -8,7 +8,7 @@
 (defn prime-factors
   [number]
   (loop [n number f 2 pfacts '()]
-    (if (= 1 n) 
+    (if (or (= n 0) (= 1 n)) 
       pfacts 
       (let [divisible? (zero? (rem n f))]
         (recur (if divisible? (/ n f) n) 

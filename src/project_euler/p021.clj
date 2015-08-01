@@ -9,18 +9,19 @@
 ;;; 
 ;;; Evaluate the sum of all the amicable numbers under 10000.
 
-(def d (fn [x] (reduce +' (butlast (factors x)))))
+(def factors
+  (memoize 
+    (fn [number]
+      (let [prime-factors (p003/prime-factors number)
+            reducer (fn [x y]
+                      (concat x (map (partial * y) x)))]
+        (into (sorted-set) (reduce reducer [1] prime-factors))))))
+
+(def d (memoize (fn [x] (reduce +' (butlast (factors x))))))
 (def amicable? (fn [a] (let [b (d a)
                              y (d b)]
                          (and (not= a b)(= a y))))) 
 (def amicable-numbers (filter amicable? (range)))
-
-(defn factors
-  [number]
-  (let [prime-factors (p003/prime-factors number)
-        reducer (fn [x y]
-                  (concat x (map (partial * y) x)))]
-    (into (sorted-set) (reduce reducer [1] prime-factors))))
 
 (defn solve [] 
   (reduce + (take-while (partial > 10000) (filter amicable? (range)))))
