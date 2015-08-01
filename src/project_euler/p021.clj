@@ -16,15 +16,10 @@
             reducer (fn [x y]
                       (concat x (map (partial * y) x)))]
         (into (sorted-set) (reduce reducer [1] prime-factors))))))
-
 (def d (memoize (fn [x] (reduce +' (butlast (factors x))))))
-(def amicable? (fn [a] (let [b (d a)
-                             y (d b)]
-                         (and (not= a b)(= a y))))) 
-(def amicable-numbers (filter amicable? (range)))
+(def amicable? (fn [a] (and (not= a (d a)) (= a (d (d a)))))) 
 
-(defn solve [] 
-  (reduce + (take-while (partial > 10000) (filter amicable? (range)))))
+(defn solve [] (reduce + (take-while (partial > 10000) (filter amicable? (range)))))
 
 
 
