@@ -32,4 +32,4 @@
 
 (defn solve
   []
-  (longest-collatz 1000000))
+  (longest-collatz 1e6))
