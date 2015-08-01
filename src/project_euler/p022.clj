@@ -14,6 +14,10 @@
 ;; but wanted to solve without modifying resources
 (def sorted-names (sort (map read-string (s/split (slurp "resources/p022_names.txt") #","))))
 
-(defn word->value [word] (reduce + (map char->val (seq word))))
+(defn word->value 
+  [word] 
+  (reduce + (map char->val (seq word))))
 
-(defn solve [] (reduce +' (map * (map word->value sorted-names) (map inc (range)))))
+(defn solve 
+  [] 
+  (reduce +' (map * (map word->value sorted-names) (map inc (range)))))
