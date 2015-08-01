@@ -16,4 +16,6 @@
 (def d (memoize (fn [x] (reduce +' (conj (factors x) (- x))))))
 (def amicable? (fn [a] (and (not= a (d a)) (= a (d (d a)))))) 
 
-(defn solve [] (reduce + (filter amicable? (range 10000))))
+(defn solve 
+  [] 
+  (reduce + (filter amicable? (range 1e4))))
