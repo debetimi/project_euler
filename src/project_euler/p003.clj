@@ -10,14 +10,16 @@
 
 (defn prime-factors
   [number]
-  (loop [n number f 2 pfacts '() terminate (bigint (m/ceil (m/sqrt number)))]
-    (cond 
-      (or (contains? @cache n) (= n 0) (= 1 n)) (get (swap! cache assoc number (concat pfacts (get @cache n))) number) 
-      (and (> f terminate) (empty? pfacts)) (get (swap! cache assoc number [number]) number) 
-      :else (let [divisible? (zero? (rem n f))]
-              (recur (if divisible? (/ n f) n) 
-                     (if divisible? f (if (= 2 f) (inc f) (+ 2 f))) 
-                     (if divisible? (conj pfacts f) pfacts) terminate)))))
+  {:pre [(>= number 0)]}
+  (let [terminate (bigint (m/ceil (m/sqrt number)))]
+    (loop [n number f 2 pfacts '()]
+      (cond 
+        (or (contains? @cache n) (<= n 1)) (get (swap! cache assoc number (concat pfacts (get @cache n))) number) 
+        (and (> f terminate) (empty? pfacts)) (get (swap! cache assoc number [number]) number) 
+        :else (let [divisible? (zero? (rem n f))]
+                (recur (if divisible? (/ n f) n) 
+                       (if divisible? f (if (= 2 f) (inc f) (+ 2 f))) 
+                       (if divisible? (conj pfacts f) pfacts)))))))
 
 (defn solve 
   []
