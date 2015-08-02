@@ -15,7 +15,7 @@
     (loop [n number f 2 pfacts '()]
       (cond 
         (or (contains? @cache n) (<= n 1)) (get (swap! cache assoc number (concat pfacts (get @cache n))) number) 
-        (and (> f terminate) (empty? pfacts)) (get (swap! cache assoc number [number]) number) 
+        (> f terminate) (get (swap! cache assoc number [number]) number) 
         :else (let [divisible? (zero? (rem n f))]
                 (recur (if divisible? (/ n f) n) 
                        (if divisible? f (if (= 2 f) (inc f) (+ 2 f))) 
