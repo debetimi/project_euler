@@ -9,7 +9,7 @@
   [word n]
   {:pre [(>= (factorial (count word)) n),
          (> n 0)]}
-  (loop [options (into [] (sort word)) lim n permutation ""]
+  (loop [options (vec (sort word)) lim n permutation ""]
     (if (empty? options) 
       permutation
       (let [len (count options)
