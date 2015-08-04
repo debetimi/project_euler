@@ -14,7 +14,7 @@
       permutation
       (let [len (count options)
             base (factorial (dec len))
-            index (last (take-while #(> lim (* base %)) (range 10)))]
+            index (last (take-while #(> lim (* base %)) (range)))]
         (recur (vec (concat (subvec options 0 index) (subvec options (inc index) len))) (- lim (* index base)) (str permutation (nth options index)))))))
 
 (defn solve [] (nth-lexicographic-permutation "0123456789" 1e6))
