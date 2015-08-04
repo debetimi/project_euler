@@ -7,8 +7,7 @@
 
 (defn nth-lexicographic-permutation
   [word n]
-  {:pre [(>= (factorial (count word)) n),
-         (> n 0)]}
+  {:pre [(>= (factorial (count word)) n 1)]}
   (loop [options (vec (sort word)) lim n permutation ""]
     (if (empty? options) 
       permutation
