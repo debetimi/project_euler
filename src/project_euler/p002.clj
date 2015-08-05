@@ -14,6 +14,4 @@
   [n]
   (reduce +' (filter even? (take-while (partial > n) fibonacci))))
 
-(defn solve 
-  []
-  (sum-of-even-fib-values-less-than-n 4000000))
+(defn solve [] (sum-of-even-fib-values-less-than-n 4000000))
