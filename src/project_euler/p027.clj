@@ -17,8 +17,8 @@
         best-pair (atom nil)
         prime? (fn [x] (= 1 (count (p003/prime-factors x))))
         primes (take-while (partial > 1001) (p007/lazy-primes3))]
-    (doseq [a (range -999 1001 2)]
-      (doseq [b primes]
+    (doseq [b primes]
+      (doseq [a (range (- b) 1001 2)]
         (let [f (fn [n] (+' (*' n n) (*' a n) b))
               num-primes (count (take-while prime? (map f (range))))]
           (when (> num-primes @most-primes)
