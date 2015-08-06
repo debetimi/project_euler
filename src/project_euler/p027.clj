@@ -1,7 +1,6 @@
 (ns project-euler.p027
   (:require [project-euler.p003 :as p003]
-            [project-euler.p007 :as p007]
-            [clojure.math.combinatorics :as combinatorics]))
+            [project-euler.p007 :as p007]))
 
 (defn prime? [x] (= 1 (count (p003/prime-factors x))))
 
