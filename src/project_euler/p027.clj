@@ -17,4 +17,3 @@
             (reset! most-primes num-primes)
             (reset! best-pair [a b])))))
     (reduce * @best-pair))) 
-
