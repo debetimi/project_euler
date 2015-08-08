@@ -41,4 +41,4 @@
 
 (defn solve 
   [] 
-  (reduce + (filter amicable? (range 1e4))))
+  (reduce + (filter amicable? (range 2 1e4))))
