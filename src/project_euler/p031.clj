@@ -10,13 +10,13 @@
                  "USD" [1 5 10 25 50 100]})
 
 (defn num-ways-to-make-change
-  [amt & {:keys [ISO], :or {ISO "USD"}}]
+  [amt & {:keys [iso], :or {iso "USD"}}]
   (let [ways (atom (vec (repeat amt 0)))]
-    (doseq [coin (get currencies ISO)]
+    (doseq [coin (get currencies iso)]
       (doseq [n (range (dec coin) amt)]
         (let [curr (get @ways n)
               increment (get @ways (- n coin) 1)]
           (swap! ways assoc n (+' curr increment)))))
     (get @ways (dec amt))))
 
-(defn solve [] (num-ways-to-make-change 200 :ISO "GBP"))
+(defn solve [] (num-ways-to-make-change 200 :iso "GBP"))
