@@ -14,7 +14,7 @@
     (doseq [coin currency]
       (doseq [n (range (dec coin) amt)]
         (let [curr (get @ways n)
-              increment (if (= n (dec coin)) 1 (get @ways (- n coin)))]
+              increment (get @ways (- n coin) 1)]
           (swap! ways assoc n (+ curr increment)))))
     (get @ways (dec amt))))
 
