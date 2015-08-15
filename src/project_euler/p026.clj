@@ -33,4 +33,4 @@
 (defn solve []
   (let [primes (take-while (partial > 1000) (p007/lazy-primes3))
         reducer (fn [x y] (if (> (+ (count (str (val x))) (quot (key x) 10)) (+ (count (str (val y))) (quot (key y) 10))) x y))]
-    (reduce reducer (filter #((complement nil?) (val %)) (zipmap primes (map cyclic-for-prime primes))))))
+    (reduce reducer (remove (comp nil? (partial val)) (zipmap primes (map cyclic-for-prime primes))))))
