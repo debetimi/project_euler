@@ -28,9 +28,9 @@
   (let [t (quot n 10)
         s (rem n 10)]
     (into #{}  (filter (partial < n)
-                       (concat (map (partial + (* t 10)) (range 1 10))
+                       (concat (map (partial + (* t 10)) (range s 10))
                                (map (partial + (* s 10)) (range 1 10))
-                               (map (partial + t) (range 10 100 10))
+                               (map (partial + t) (range (* (inc t) 10) 100 10))
                                (map (partial + s) (range 10 100 10)))))))
 
 (defn solve [] 
