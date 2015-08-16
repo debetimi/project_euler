@@ -7,5 +7,5 @@
 
 (defn solve []
   (let [mult3 (fn [digits] (zero? (rem (reduce + (range (inc digits))) 3))) ;if sum of digits is divisible by 3 then number is divisible by 3
-        pandigital (fn [x] (first (filter prime? (remove even? (map digits->num (permutations (reverse (range 1 (inc x)))))))))]
-    (some pandigital (reverse (remove mult3 (range 1 10))))))
+        max-pandigital (fn [x] (first (filter prime? (remove even? (map digits->num (permutations (reverse (range 1 (inc x)))))))))]
+    (some max-pandigital (remove mult3 (reverse (range 1 10))))))
