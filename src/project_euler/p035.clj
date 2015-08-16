@@ -5,11 +5,10 @@
 ;; There are thirteen such primes below 100: 2, 3, 5, 7, 11, 13, 17, 31, 37, 71, 73, 79, and 97.
 ;; How many circular primes are there below one million?
 
-(defn only-odd-digits? [x] (every? odd? (map (comp read-string str) (str x))))
-
-(defn circular? [prime] 
-  (every? utils/prime? (map read-string (rest (take (count (str prime)) (iterate utils/left-shift (str prime)))))))
-
 (defn solve 
   ([] (solve 1e6))
-  ([n] (inc (count (filter circular? (filter only-odd-digits? (take-while (partial > n) utils/lazy-primes)))))))
+  ([n] (letfn [(only-odd-digits? [x]
+                 (every? odd? (utils/num->digits x)))
+               (circular? [prime] 
+                 (every? utils/prime? (map read-string (rest (take (count (str prime)) (iterate utils/left-shift (str prime)))))))]
+         (inc (count (filter circular? (filter only-odd-digits? (take-while (partial > n) utils/lazy-primes))))))))
