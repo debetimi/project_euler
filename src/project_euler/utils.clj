@@ -3,6 +3,7 @@
   (:require [clojure.math.numeric-tower :as math]
             [clojure.string :as string]))
 
+;; Fibonacci
 (def lazy-fibonacci
   "fibonacci lazy sequence"
   (letfn [(fib [a b]
@@ -10,7 +11,6 @@
     (fib 0 1)))
 
 ;;; String Manipulations
-
 (defn left-shift 
   "Rotates a string left"
   [w] 
@@ -21,20 +21,7 @@
   [w]
   (string/reverse (left-shift (string/reverse w))))
 
-
-
-(defn num->digits 
-  "Returns a sequence of the digits in a number"
-  [n]
-  (let [char-to-digits {\0 0, \1 1,
-                        \2 2, \3 3,
-                        \4 4, \5 5,
-                        \6 6, \7 7,
-                        \8 8, \9 9}]
-    (map char-to-digits (str n)))) 
-
 ;;; Prime  Functions
-
 (def prime-factors
   "Returns a list of prime factors of a number
    e.g (prime-factors 4) -> (2 2)"
@@ -99,7 +86,6 @@
         (reduce reducer [1] (map power-set (frequencies (prime-factors n))))))))
 
 ;;; Math Operations
-
 (defn lcm 
   "Returns the least common multiple of a and b"
   [a b]
@@ -109,3 +95,13 @@
   "Returns n!"
   [n] 
   (reduce *' (range 1 (inc n))))
+
+(defn num->digits 
+  "Returns a sequence of the digits in a number"
+  [n]
+  (let [char-to-digits {\0 0, \1 1,
+                        \2 2, \3 3,
+                        \4 4, \5 5,
+                        \6 6, \7 7,
+                        \8 8, \9 9}]
+    (map char-to-digits (str n)))) 
