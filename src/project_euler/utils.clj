@@ -1,12 +1,27 @@
 (ns project-euler.utils
   "Contains commonly used utility functions"
-  (:require [clojure.math.numeric-tower :as math]))
+  (:require [clojure.math.numeric-tower :as math]
+            [clojure.string :as string]))
 
 (def lazy-fibonacci
   "fibonacci lazy sequence"
   (letfn [(fib [a b]
             (cons a (lazy-seq (fib b (+' a b)))))]
     (fib 0 1)))
+
+;;; String Manipulations
+
+(defn left-shift 
+  "Rotates a string left"
+  [w] 
+  (str (subs w 1) (subs w 0 1)))
+
+(defn right-shift 
+  "Rotates a string right"
+  [w]
+  (string/reverse (left-shift (string/reverse w))))
+
+
 
 (defn num->digits 
   "Returns a sequence of the digits in a number"
@@ -17,6 +32,8 @@
                         \6 6, \7 7,
                         \8 8, \9 9}]
     (map char-to-digits (str n)))) 
+
+;;; Prime  Functions
 
 (def prime-factors
   "Returns a list of prime factors of a number
@@ -59,6 +76,8 @@
                                            (+ candidate 2))))))]
     (cons 2 (lazy-seq (next-primes {} 3)))))
 
+(defn prime? [x] (= x (first (prime-factors x))))
+
 (def factors
   "Returns set of factors of n"
   (memoize 
@@ -78,6 +97,8 @@
             reducer (fn [factors prime-power-set] 
                       (concat factors (flatten (map #(map (partial * %) factors) prime-power-set))))]
         (reduce reducer [1] (map power-set (frequencies (prime-factors n))))))))
+
+;;; Math Operations
 
 (defn lcm 
   "Returns the least common multiple of a and b"
