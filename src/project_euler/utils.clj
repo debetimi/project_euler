@@ -105,3 +105,8 @@
                         \6 6, \7 7,
                         \8 8, \9 9}]
     (map char-to-digits (str n)))) 
+
+(defn digits->num
+  "Takes a sequence of digits and returns the number"
+  [digits]
+  ((comp read-string (partial apply str)) digits))
