@@ -10,4 +10,4 @@
             (= x (string/reverse x)))
           (double-base-palindrome? [x]
             (and (palindrome? (Integer/toString x 2)) (palindrome? (Integer/toString x 10))))]
-    (reduce +' (filter double-base-palindrome? (range 1e6)))))
+    (reduce +' (filter double-base-palindrome? (range 1 1e6 2)))))
