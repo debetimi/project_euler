@@ -1,5 +1,5 @@
 (ns project-euler.p025
-  (:require [project-euler.p002 :as p002]))
+  (:require [project-euler.utils :refer [lazy-fibonacci]]))
 
 ;;; The Fibonacci sequence is defined by the recurrence relation:
 ;;; 
@@ -22,4 +22,4 @@
 ;;; 
 ;;; What is the index of the first term in the Fibonacci sequence to contain 1000 digits?
 
-(defn solve [] (count (take-while #(> 1000 (count (str %) )) p002/fibonacci)))
+(defn solve [] (count (take-while #(> 1000 (count (str %) )) lazy-fibonacci)))

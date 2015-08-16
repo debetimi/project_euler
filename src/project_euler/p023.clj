@@ -1,5 +1,5 @@
 (ns project-euler.p023
-  (:require [project-euler.p021 :refer [factors2, factors]])) 
+  (:require [project-euler.utils :refer [factors]])) 
 
 ;;; A perfect number is a number for which the sum of its proper divisors is exactly equal to the number. For example, the sum of the proper divisors of 28 would be 1 + 2 + 4 + 7 + 14 = 28, which means that 28 is a perfect number.
 ;;; 
@@ -11,9 +11,7 @@
 
 (def sum-of-factors (reduce (fn [x y] (assoc x y (reduce + (conj (factors y) (- y))))) {} (range 1 28124)))
 
-(defn abundant?
-  [x]
-  (> (val x) (key x)))
+(defn abundant? [x] (> (val x) (key x)))
 
 (def abundant-numbers (into (sorted-set) (map key (filter abundant? sum-of-factors))))
 
@@ -21,6 +19,4 @@
   [n]
   (some? (some #(and (abundant-numbers %) (abundant-numbers (- n %))) (take-while (partial >= (/ n 2)) abundant-numbers))))
 
-(defn solve
-  []
-  (reduce + (filter (complement sum-of-abundant?) (range 1 28124))))
+(defn solve [] (reduce + (remove sum-of-abundant? (range 1 28124))))

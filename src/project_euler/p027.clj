@@ -1,6 +1,5 @@
 (ns project-euler.p027
-  (:require [project-euler.p003 :as p003]
-            [project-euler.p007 :as p007]))
+  (:require [project-euler.utils :as utils]))
 
 ;;; Euler discovered the remarkable quadratic formula:
 ;;; n² + n + 41
@@ -15,8 +14,8 @@
 (defn solve []
   (let [most-primes (atom -1)
         best-pair (atom nil)
-        prime? (fn [x] (= 1 (count (p003/prime-factors x))))
-        primes (take-while (partial > 1001) (p007/lazy-primes3))]
+        prime? (fn [x] (= 1 (count (utils/prime-factors x))))
+        primes (take-while (partial > 1001) utils/lazy-primes)]
     (doseq [b primes]
       (doseq [a (range (- b) 1001 2)]
         (let [f (fn [n] (+' (*' n n) (*' a n) b))

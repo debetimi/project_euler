@@ -1,6 +1,7 @@
 (ns project-euler.p010
- (require [project-euler.p007 :as p007])) 
+ (require [project-euler.utils :refer [lazy-primes]])) 
 
-(defn solve
-  []
-  (reduce +' (take-while (partial > 2e6) (p007/lazy-primes3))))
+;;; The sum of the primes below 10 is 2 + 3 + 5 + 7 = 17.
+;;; Find the sum of all the primes below two million.
+
+(defn solve [] (reduce +' (take-while (partial > 2e6) lazy-primes)))

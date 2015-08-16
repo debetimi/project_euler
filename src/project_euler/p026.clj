@@ -1,6 +1,5 @@
 (ns project-euler.p026
-  (:require [project-euler.p007 :as p007]
-            [clojure.math.numeric-tower :as  m]))
+  (:require [project-euler.utils :refer [lazy-primes]]))
 
 ;;; A unit fraction contains 1 in the numerator. The decimal representation of the unit fractions with denominators 2 to 10 are given:
 ;;; 
@@ -17,7 +16,7 @@
 ;;; 
 ;;; Find the value of d < 1000 for which 1/d contains the longest recurring cycle in its decimal fraction part.
 
-;; https://en.wikipedia.org/wiki/Cyclic_numberhttps://en.wikipedia.org/wiki/Cyclic_number
+;; https://en.wikipedia.org/wiki/Cyclic_number
 
 (defn cyclic-for-prime
   [p] 
@@ -31,6 +30,6 @@
         (recur (inc t) r n)))))
 
 (defn solve []
-  (let [primes (take-while (partial > 1000) (p007/lazy-primes3))
+  (let [primes (take-while (partial > 1000) lazy-primes)
         reducer (fn [x y] (if (> (+ (count (str (val x))) (quot (key x) 10)) (+ (count (str (val y))) (quot (key y) 10))) x y))]
     (reduce reducer (remove (comp nil? (partial val)) (zipmap primes (map cyclic-for-prime primes))))))

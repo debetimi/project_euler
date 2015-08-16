@@ -1,5 +1,6 @@
 (ns project-euler.p030
-  (:require [clojure.math.numeric-tower :as math]))
+  (:require [clojure.math.numeric-tower :as math]
+            [project-euler.utils :refer [num->digits]]))
 
 ;;; Surprisingly there are only three numbers that can be written as the sum of fourth powers of their digits:
 ;;; 1634 = 14 + 64 + 34 + 44
@@ -12,15 +13,10 @@
 
 (defn sum-of-digits-to-the-n
   "Returns a set of numbers that are equal to the sum
-   of their digits raised to the nth power"
-  [n]
-  (let [lim (* n (math/expt 9 n))
-        num->sum (fn [x]
-                   (->> x
-                        str
-                        seq 
-                        (map (comp #(math/expt % n) read-string str))
-                        (reduce +)))
+   of their digits raised to pow"
+  [pow]
+  (let [lim (* pow (math/expt 9 pow))
+        num->sum (fn [x] (reduce + (map #(math/expt % pow) (num->digits x))))
         sum? (fn [x] (= x (num->sum x)))]
     (filter sum? (range 2 (inc lim)))))
 
