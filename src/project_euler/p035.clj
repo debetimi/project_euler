@@ -11,4 +11,4 @@
                  (every? odd? (utils/num->digits x)))
                (circular? [prime] 
                  (every? utils/prime? (map read-string (rest (take (count (str prime)) (iterate utils/left-shift (str prime)))))))]
-         (inc (count (filter circular? (filter only-odd-digits? (take-while (partial > n) utils/lazy-primes))))))))
+         (inc (count (filter (every-pred only-odd-digits? circular?) (take-while (partial > n) utils/lazy-primes)))))))
