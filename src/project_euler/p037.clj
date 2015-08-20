@@ -10,6 +10,6 @@
         drop-right-digit (fn [x] ((comp read-string (partial apply str) butlast str) x))
         drop-left-digit (fn [x] ((comp read-string (partial apply str) rest str) x))
         truncatable? (fn [x] (let [len (count (str x))]
-                               (and (every? utils/prime? (rest (take len (iterate drop-right-digit x))))
-                                    (every? utils/prime? (rest (take len (iterate drop-left-digit x)))))))]
+                               (and (every? utils/prime? (concat (rest (take len (iterate drop-right-digit x)))
+                                                                 (rest (take len (iterate drop-left-digit x))))))))]
     (reduce + (take 11 (filter (every-pred odds? truncatable?) (drop 4 utils/lazy-primes))))))
