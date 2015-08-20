@@ -25,4 +25,3 @@
 
 (defn solve []
   (some pandigital-multiple? (combo/permutations (reverse (range 1 10)))))
-
