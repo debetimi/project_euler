@@ -14,8 +14,8 @@
 ;; digits would produce number so 2 3 3 4 respectively
 ;; and 3 digits would produce numbers of 3 4 4 respectively
 ;; both of which aren't exactly 9 digits 
-(defn pandigital? [digits] 
+(defn pandigital-multiple? [digits] 
   (= (* 2 (digits->num (take 4 digits))) (digits->num (drop 4 digits))))
 
 (defn solve []
-  (digits->num (first (filter pandigital? (combo/permutations (reverse (range 1 10)))))))
+  (digits->num (first (filter pandigital-multiple? (combo/permutations (reverse (range 1 10)))))))
