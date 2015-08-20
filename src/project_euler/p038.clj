@@ -13,7 +13,7 @@
 ;; We know it has to be a 4 digit number since 2 
 ;; digits would produce number so 2 3 3 4 respectively
 ;; and 3 digits would produce numbers of 3 4 4 respectively
-;; both of which is exactly 9 digits 
+;; both of which aren't exactly 9 digits 
 (defn pandigital? [digits] 
   (= (* 2 (digits->num (take 4 digits))) (digits->num (drop 4 digits))))
 
