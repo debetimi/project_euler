@@ -15,5 +15,5 @@
 
 (defn solve []
   (let [max-len (fn [p x] (if (> (val x) (val p)) x p))
-        nums (range 12 1001)]
+        nums (range 12 1001 2)]
     (reduce max-len (zipmap nums (map (comp count triplets) nums)))))
