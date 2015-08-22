@@ -3,6 +3,21 @@
   (:require [clojure.math.numeric-tower :as math]
             [clojure.string :as string]))
 
+(defn nths 
+  "Returns a vector of the values in the collection of indices
+   provided"
+  [coll indices]
+  {:pre [(every? (partial <= 0) indices)]}
+  (let [sorted (apply sorted-set indices) 
+        terminal (last sorted)
+        reducer (fn [[collected remaining prev-index] index]
+                  (let [delta (- index prev-index)
+                        next-step (drop (dec delta) remaining)]
+                    (if (= terminal index)
+                      (reduced (conj collected (first next-step)))
+                      [(conj collected (first next-step)) (rest next-step) index])))]
+    (reduce reducer [[] coll -1] sorted)))
+
 ;; Fibonacci
 (def lazy-fibonacci
   "fibonacci lazy sequence"

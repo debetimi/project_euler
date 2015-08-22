@@ -1,5 +1,5 @@
 (ns project-euler.p040
-  (:require [project-euler.utils :as utils]
+  (:require [project-euler.utils :refer [nths num->digits]]
             [clojure.math.numeric-tower :as math]))
 
 ;An irrational decimal fraction is created by concatenating the positive integers:
@@ -11,18 +11,7 @@
 ;; TODO - write function called nths that takes a collection of indexes to retur
 ;; and iterates once
 
-(defn nths [coll indices]
-  {:pre [(every? (partial <= 0) indices)]}
-  (let [sorted (into [] (apply sorted-set indices))
-        terminal (last sorted)
-        reducer (fn [[collected remaining prev-index] index]
-                  (let [delta (- index prev-index)
-                        next-val (last (take delta remaining))]
-                    (if (= terminal index)
-                      (reduced (conj collected next-val))
-                      [(conj collected next-val) (drop delta remaining) index])))]
-    (reduce reducer [[] coll -1] sorted)))
 
 (defn solve []
   (let [indexes (map (comp dec (partial math/expt 10)) (range))]
-    (reduce * (map (partial nth (flatten (map (comp utils/num->digits inc) (range)))) (take 7 indexes)))))
+    (reduce * (nths (flatten (map (comp num->digits inc) (range))) (take 7 indexes)))))
