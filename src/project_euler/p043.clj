@@ -26,8 +26,8 @@
 (defn next-steps [step]
   (map (partial conj step) (remove (set step) (range 10))))
 
-(defn build-pandigital [prefixes [idx prime]]
-  (filter #(divisible? prime (drop idx %)) (apply concat (map next-steps prefixes))))
+(defn build-pandigital [prefixes [idx n]]
+  (filter #(divisible? n (drop idx %)) (apply concat (map next-steps prefixes))))
 
 (defn solve []
   (let [options (remove (any-pred leading-zero? zero-and-five?) (apply concat (map permutations (combinations (range 10) 2))))]
