@@ -141,4 +141,7 @@
 (defn digits->num
   "Takes a sequence of digits and returns the number"
   [digits]
-  ((comp read-string (partial apply str)) digits))
+  (if (and (zero? (first digits))
+           (> (count digits) 1))
+    (digits->num (rest digits))
+    ((comp read-string (partial apply str)) digits)))

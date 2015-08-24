@@ -14,7 +14,7 @@
 ;;; Find the sum of all 0 to 9 pandigital numbers with this property.
 
 (defn divisible? [n digits]
-  (zero? (mod (digits->num (if (zero? (first digits)) (rest digits) digits)) n)))
+  (zero? (mod (digits->num digits) n)))
 
 (defn next-steps [step]
   (map #(cons % step) (remove (set step) (range 10))))
