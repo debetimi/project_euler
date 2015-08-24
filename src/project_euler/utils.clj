@@ -3,6 +3,14 @@
   (:require [clojure.math.numeric-tower :as math]
             [clojure.string :as string]))
 
+;;; Collections
+
+(defn enumerate 
+  "Returns lazy sequence of vectors
+   containing index of element and element"
+  [coll]
+  (partition 2 (interleave (range) coll)))
+
 (defn nths 
   "Returns a vector of the values in the collection of indices
    provided"
