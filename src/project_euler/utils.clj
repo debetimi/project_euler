@@ -3,8 +3,16 @@
   (:require [clojure.math.numeric-tower :as math]
             [clojure.string :as string]))
 
-;;; Collections
+(defn any-pred 
+  "Returns a function that returns true
+   if any of the supplied predicates returns
+   true on provided input"
+  [& preds]
+  (fn [& v]
+    (boolean (some #(apply % v) preds))))
 
+
+;;; Collections
 (defn enumerate 
   "Returns lazy sequence of vectors
    containing index of element and element"
@@ -26,7 +34,8 @@
                       [(conj collected (first next-step)) (rest next-step) index])))]
     (reduce reducer [[] coll -1] sorted)))
 
-;; Fibonacci
+
+;;; Fibonacci
 (def lazy-fibonacci
   "fibonacci lazy sequence"
   (letfn [(fib [a b]

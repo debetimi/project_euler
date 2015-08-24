@@ -1,5 +1,5 @@
 (ns project-euler.p043
-  (:require [project-euler.utils :refer [digits->num enumerate]]
+  (:require [project-euler.utils :refer [digits->num enumerate any-pred]]
             [clojure.math.combinatorics :refer [combinations permutations]]))
 
 ;;; The number, 1406357289, is a 0 to 9 pandigital number because it is made up of each of the digits 0 to 9 in some order, but it also has a rather interesting sub-string divisibility property.
@@ -19,21 +19,25 @@
   [digits]
   (zero? (first digits)))
 
-(defn divisible-by-n? 
+(defn zero-and-five? [digits]
+  (let [f (set digits)]
+    (boolean (and (f 0) (f 5)))))
+
+(defn divisible? 
   [n digits]
   (zero? (mod (digits->num (if (leading-zero? digits) (rest digits) digits)) n)))
 
-(defn append-valid-suffixes 
+(defn next-step 
   [pred n prefix]
   (let [remaining (remove (set prefix) (range 10))
         possibilities (map (partial conj prefix) remaining)]
     (filter (comp pred (partial drop n)) possibilities)))
 
-(defn reduce-fn 
+(defn build-pandigital 
   [prefixes [idx prime]]
-  (let [divisible? (partial divisible-by-n? prime)]
-    (apply concat (map (partial append-valid-suffixes divisible? (inc idx)) prefixes))))
+  (let [divisible? (partial divisible? prime)]
+    (apply concat (map (partial next-step divisible? (inc idx)) prefixes))))
 
 (defn solve []
-  (let [options (apply concat (map permutations (combinations (range 10) 3)))]
-    (reduce + (map digits->num (reduce reduce-fn options (enumerate primes))))))
+  (let [options (remove (any-pred leading-zero? zero-and-five?) (apply concat (map permutations (combinations (range 10) 3))))]
+    (reduce + (map digits->num (reduce build-pandigital options (enumerate primes))))))
