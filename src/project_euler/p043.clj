@@ -13,8 +13,6 @@
 ;;; d8d9d10=289 is divisible by 17
 ;;; Find the sum of all 0 to 9 pandigital numbers with this property.
 
-(def primes [2 3 5 7 11 13 17])
-
 (defn leading-zero? [digits]
   (zero? (first digits)))
 
@@ -36,4 +34,4 @@
 
 (defn solve []
   (let [options (remove (any-pred leading-zero? zero-and-five?) (apply concat (map permutations (combinations (range 10) 3))))]
-    (reduce + (map digits->num (reduce build-pandigital options (enumerate primes))))))
+    (reduce + (map digits->num (reduce build-pandigital options (enumerate [2 3 5 7 11 13 17]))))))
