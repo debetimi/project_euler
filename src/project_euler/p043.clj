@@ -23,14 +23,14 @@
 (defn divisible? [n digits]
   (zero? (mod (digits->num (if (leading-zero? digits) (rest digits) digits)) n)))
 
-(defn next-step [pred n prefix]
-  (let [remaining (remove (set prefix) (range 10))
-        possibilities (map (partial conj prefix) remaining)]
+(defn next-steps [pred n step]
+  (let [remaining (remove (set step) (range 10))
+        possibilities (map (partial conj step) remaining)]
     (filter (comp pred (partial drop n)) possibilities)))
 
 (defn build-pandigital [prefixes [idx prime]]
   (let [divisible? (partial divisible? prime)]
-    (apply concat (map (partial next-step divisible? (inc idx)) prefixes))))
+    (apply concat (map (partial next-steps divisible? (inc idx)) prefixes))))
 
 (defn solve []
   (let [options (remove (any-pred leading-zero? zero-and-five?) (apply concat (map permutations (combinations (range 10) 3))))]
