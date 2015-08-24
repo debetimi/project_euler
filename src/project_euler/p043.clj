@@ -15,26 +15,22 @@
 
 (def primes [2 3 5 7 11 13 17])
 
-(defn leading-zero?
-  [digits]
+(defn leading-zero? [digits]
   (zero? (first digits)))
 
 (defn zero-and-five? [digits]
   (let [f (set digits)]
     (boolean (and (f 0) (f 5)))))
 
-(defn divisible? 
-  [n digits]
+(defn divisible? [n digits]
   (zero? (mod (digits->num (if (leading-zero? digits) (rest digits) digits)) n)))
 
-(defn next-step 
-  [pred n prefix]
+(defn next-step [pred n prefix]
   (let [remaining (remove (set prefix) (range 10))
         possibilities (map (partial conj prefix) remaining)]
     (filter (comp pred (partial drop n)) possibilities)))
 
-(defn build-pandigital 
-  [prefixes [idx prime]]
+(defn build-pandigital [prefixes [idx prime]]
   (let [divisible? (partial divisible? prime)]
     (apply concat (map (partial next-step divisible? (inc idx)) prefixes))))
 
