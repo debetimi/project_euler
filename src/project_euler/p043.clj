@@ -30,5 +30,5 @@
   (filter #(divisible? prime (drop idx %)) (apply concat (map next-steps prefixes))))
 
 (defn solve []
-  (let [options (remove (any-pred leading-zero? zero-and-five?) (apply concat (map permutations (combinations (range 10) 3))))]
-    (reduce + (map digits->num (reduce build-pandigital options (rest (enumerate [1 2 3 5 7 11 13 17])))))))
+  (let [options (remove (any-pred leading-zero? zero-and-five?) (apply concat (map permutations (combinations (range 10) 2))))]
+    (reduce + (map digits->num (reduce build-pandigital options (enumerate [1 2 3 5 7 11 13 17]))))))
