@@ -13,15 +13,8 @@
 ;;; d8d9d10=289 is divisible by 17
 ;;; Find the sum of all 0 to 9 pandigital numbers with this property.
 
-(defn leading-zero? [digits]
-  (zero? (first digits)))
-
-(defn zero-and-five? [digits]
-  (let [f (set digits)]
-    (boolean (and (f 0) (f 5)))))
-
 (defn divisible? [n digits]
-  (zero? (mod (digits->num (if (leading-zero? digits) (rest digits) digits)) n)))
+  (zero? (mod (digits->num (if (zero? (first digits)) (rest digits) digits)) n)))
 
 (defn next-steps [step]
   (map (partial conj step) (remove (set step) (range 10))))
@@ -30,5 +23,5 @@
   (filter #(divisible? n (drop idx %)) (apply concat (map next-steps prefixes))))
 
 (defn solve []
-  (let [options (remove (any-pred leading-zero? zero-and-five?) (apply concat (map permutations (combinations (range 10) 2))))]
+  (let [options (apply concat (map permutations (combinations (range 10) 2)))]
     (reduce + (map digits->num (reduce build-pandigital options (enumerate [1 2 3 5 7 11 13 17]))))))
