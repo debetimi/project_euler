@@ -118,11 +118,6 @@
         (reduce reducer [1] (map power-set (frequencies (prime-factors n))))))))
 
 ;;; Math Operations
-(defn lcm 
-  "Returns the least common multiple of a and b"
-  [a b]
-  (/ (* a b) (math/gcd a b)))
-
 (defn factorial 
   "Returns n!"
   [n] 
