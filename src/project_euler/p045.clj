@@ -12,6 +12,6 @@
 (defn hexagonal [n]
   (* n (dec (* 2 n))))
 
-;; triangular numbers are hexagonal so we don't need a special predicate for that
+;; hexagonal numbers are triangular so we don't need a special predicate for that
 (defn solve []
   (first (filter pentagonal? (map (comp hexagonal (partial + 144)) (range)))))
