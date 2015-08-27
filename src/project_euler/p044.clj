@@ -7,14 +7,12 @@
 ;;; It can be seen that P4 + P7 = 22 + 70 = 92 = P8. However, their difference, 70 − 22 = 48, is not pentagonal.
 ;;; Find the pair of pentagonal numbers, Pj and Pk, for which their sum and difference are pentagonal and D = |Pk − Pj| is minimised; what is the value of D?
 
-(defn pentagon [n]
+(defn pentagonal [n]
   (/ (* n (dec (* 3 n))) 2))
 
 (def pentagonal-numbers
-  "Lazy sequence of pentagon "
-  (letfn [(build [n]
-            (cons (pentagon n) (lazy-seq (build (inc n)))))]
-    (build 1)))
+  "Lazy sequence of pentagonal numbers"
+  (map (comp pentagonal inc) (range)))
 
 (defn pentagonal? [n]
   (integer? (/ (inc (sqrt (inc (* 24 n)))) 6))) 
@@ -24,7 +22,7 @@
     [n m]))
 
 (defn has-pair? [[idx n]]
-  (some (partial paired? n) (map pentagon (reverse (range 1 (inc idx))))))
+  (some (partial paired? n) (map pentagonal (reverse (range 1 (inc idx))))))
 
 (defn solve []
   (apply - (some has-pair? (enumerate pentagonal-numbers))))
