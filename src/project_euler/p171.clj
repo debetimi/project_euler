@@ -1,5 +1,6 @@
 (ns project-euler.p171
   (:require [clojure.math.numeric-tower :refer [sqrt]]
+            [clojure.math.combinatorics :refer [permutations]]
             [project-euler.utils :refer [digits->num]]))
 
 ;;; For a positive integer n, let f(n) be the sum of the squares of the digits  (in base 10) of n, e.g.
@@ -11,7 +12,7 @@
 (defn square [x] (* x x))
 
 (defn max-digits [limit]
-    (dec (int (Math/log10 limit))))
+  (dec (int (Math/log10 limit))))
 
 ;; Wraps array to protect it from being flattened 
 (defprotocol IProtect
@@ -39,36 +40,46 @@
 (def cache (atom {}))
 
 (defn zero-padded-variants [max-digits ^Summands summand]
-  (take-while #(>= max-digits (len %)) (iterate pad summand)))
+  (map ->Summands ((comp permutations :summands) (first (drop-while #(> max-digits (len %)) (iterate pad summand))))))
 
 (defn collector [max-digits] 
   (let [h (fn helper [v sq]
             (let [remaining (- v sq)]
-              (when (= sq 36) (println "v" v))
               (cond (contains? @cache [v sq]) (get @cache [v sq]) 
                     (neg? remaining) [] 
-                    (zero? remaining) [(get (swap! cache assoc [v sq] (->Summands [(sqrt v)])) [v sq])]
-                    :else (let [base (if(contains? @cache [remaining sq]) 
-                                       (do (when (= [40 9] [remaining sq]) (println "HIT2" remaining sq)) (get @cache [remaining sq])) 
-                                       (flatten (map (partial helper remaining)
-                                                     (take-while (and #_(partial >= sq)
-                                                                      (partial >= remaining))
-                                                                 (map square (range 1 10))))))]
-                            (when (= [9] [sq]) (println v sq remaining base))
-                            #_(when (= [40 9] [v sq]) (println "O1" base))
-                            (get (swap! cache assoc [v sq] (map #(add % sq) (filter #(> max-digits (len %)) (map reprotect base))))
+                    (zero? remaining) (get (swap! cache assoc [v sq] [(->Summands [(sqrt v)])
+                                                                      #_(->Summands [0 (sqrt v)])
+                                                                      (pad (->Summands [(sqrt v)]))
+                                                                      ])
+                                           [v sq])
+                    :else (let [cached (filter #(contains? @cache [remaining %])
+                                               (take-while #(and (>= sq sq) (>= remaining %))
+                                                           (map square (range 1 10))))
+                                uncached (take-while #(and (>= sq sq) (>= remaining %)) 
+                                                     (remove (set cached) (map square (range 1 10))))
+                                #_(println "UNCACHED" uncached "SQUARE" sq)
+                                cached-base (mapcat #(get @cache [remaining %]) cached) 
+                                base (mapcat (partial helper remaining) uncached)
+                                base2 (concat cached-base base)
+                                #_(println "BASE " base)
+                                #_(println "BASE 2 " base2)
+                                ]
+                            (get (swap! cache assoc [v sq] (filter #(> max-digits (len %)) (concat (map #(add % sq) (map reprotect base2))
+                                                                                                   (map #(add (add % sq) 0) (map reprotect base2))
+                                                                                                   (map #(add (add % 0) sq) (map reprotect base2))
+                                                                                                   )))
                                  [v sq])))))]
     h))
 
-
-(comment (def squares (possible-squares 1e20))
-         (def digits (map square (range 1 10)))
-         (def cache (atom {}))
-         (def helpfn (collector (max-digits 1e20)))
-         (def padfn (partial zero-padded-variants (max-digits 1e20)))
+(comment (do (def squares (possible-squares 1e20))
+             (def digits (map square (range 1 10)))
+             (def cache (atom {}))
+             (def helpfn (collector (max-digits 1e20)))
+             (def padfn (partial zero-padded-variants (max-digits 1e20))))
          (map #(helpfn % 25) (range 1 55))
          (time (count (reduce +' (map unwrap (flatten (map padfn (flatten (map #(map (partial helpfn %) digits) squares))))))))
-         (time (count (reduce +' (sort (map unwrap (flatten (map padfn (flatten (map #(map (partial helpfn %) digits) [49] #_(take 7 squares))))))))))
+         (time (count (reduce +' (sort (map unwrap (flatten (map #(map (partial helpfn %) digits) (range 9 10) #_(take 7 squares))))))))
+         (time (count (reduce +' (sort (count (map unwrap (flatten (map #(map (partial helpfn %) digits) [16] #_(take 3 squares)))))))))
          (time (count (map zero-padded-variants (take 250 (map unwrap (flatten (map #(map (partial helpfn %) digits) squares)))))))
          )
 
