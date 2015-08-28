@@ -1,4 +1,5 @@
-(ns project-euler.p171)
+(ns project-euler.p171
+  (:require [clojure.math.numeric-tower :refer [sqrt]]))
 
 ;;; For a positive integer n, let f(n) be the sum of the squares of the digits  (in base 10) of n, e.g.
 ;;; f(3) = 32 = 9,
@@ -12,29 +13,44 @@
   (dec (int (Math/log10 limit))))
 
 (defprotocol IProtect
-  (unwrap [this] "unwraps value"))
+  (unwrap [this] "unwraps value")
+  (len [this] "the size of this")
+  (add [this x] "adds an element"))
 
 (defrecord Summands [summands]
   IProtect
-  (unwrap [this] (:summands this)))
+  (unwrap [this] (:summands this))
+  (len [this] (count (:summands this)))
+  (add [this summand] (update this :summands conj (sqrt summand))))
 
 (defn possible-squares [limit]
   (take-while (partial >= (* 9 9 (max-digits limit))) (map (comp square inc) (range))))
 
 (def cache (atom {}))
 
-(defn get-help-fn [max-digits squares] 
-  (let [helper (fn helper [v sq coll]
-                 (let [remaining (- v sq)]
-                   (cond (or (neg? remaining) (< max-digits (count coll))) [] 
-                         (zero? remaining) (->Summands (conj coll sq))
-                         :else (flatten (map #(helper remaining % (conj coll sq)) (take-while (partial >= sq) squares))))))
-        wrapper (fn [v sq]
-                  (when-not (contains? @cache [v sq])
-                    (swap! cache assoc [v sq] (helper v sq [])))
-                  (get @cache [v sq]))
-        ]
-    wrapper))
+(defn collector [max-digits] 
+  (let [helper(fn helper [v sq]
+                (let [remaining (- v sq)]
+                  (cond (contains? @cache [v sq])  (get @cache [v sq])
+                        (neg? remaining) [] 
+                        (zero? remaining) (->Summands [(sqrt v)])
+                        :else (let [base (if (contains? @cache [remaining sq])
+                                           (get @cache [remaining sq]) 
+                                           (flatten (map (partial helper remaining)
+                                                         (take-while (and (partial >= sq)
+                                                                          (partial >= remaining))
+                                                                     (map square (range 1 10))))))]
+                                (get (swap! cache assoc [v sq] (map #(add % sq) (filter #(> max-digits (len %)) base)))
+                                     [v sq])))))]
+    helper))
+
+
+(comment (def squares (possible-squares 10e20))
+         (def cache (atom {}))
+         (def helpfn (collector 20))
+         (map #(helpfn % 25) (range 1 55))
+         (time (count (map unwrap (flatten (map #(map (partial helpfn %) digits) squares)))))
+         )
 
 (comment (defn digits-range [max-digits n]
            [(max (int (/ n 81)) 1) (min n max-digits)]))
