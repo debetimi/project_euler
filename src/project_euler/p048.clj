@@ -1,6 +1,5 @@
 (ns project-euler.p048
   (:require [clojure.core.reducers :as r]
-            [clojure.string :as s]
             [clojure.math.numeric-tower :refer [expt]]))
 
 ;;; The series, 11 + 22 + 33 + ... + 1010 = 10405071317.
