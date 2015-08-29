@@ -40,7 +40,7 @@
 (def cache (atom {}))
 
 (defn zero-padded-variants [max-digits ^Summands summand]
-  (map ->Summands ((comp permutations :summands) (first (drop-while #(> max-digits (len %)) (iterate pad summand))))))
+  (first (drop-while #(> max-digits (len %)) (iterate pad summand))))
 
 (defn collector [max-digits] 
   (let [h (fn helper [v d sq]
@@ -49,7 +49,7 @@
               (cond (contains? @cache [v sq]) (get @cache [v sq]) 
                     (neg? remaining) [] 
                     (neg? d) []
-                    (and (zero? d) (zero? remaining))(do (println "doing summand")[(->Summands [(sqrt v)])]) 
+                    (zero? remaining)(do (println "doing summand")[(->Summands [(sqrt v)])]) 
                     :else (let [cached (filter #(contains? @cache [remaining %]) (take-while (partial >= remaining) (map square (range 0 10))))
                                 uncached (take-while (partial >= remaining) (remove (set cached) (map square (range 0 10))))
                                 _ (println "uncached" uncached)
@@ -72,13 +72,14 @@
     h))
 
 (comment (do (def squares (possible-squares 1e20))
-             (def digits (map square (range 1 2)))
+             (def digits (map square (range 10)))
              (def cache (atom {}))
              (def helpfn (collector (max-digits 1e20)))
              (def padfn (partial zero-padded-variants (max-digits 1e20))))
          (map #(helpfn % 25) (range 1 55))
          (time (count (reduce +' (map unwrap (flatten (map padfn (flatten (map #(map (partial helpfn %) digits) squares))))))))
-         (time (count (reduce +' (sort (map unwrap (flatten (def foo (map #(map (partial helpfn % 18) digits) (range 4 5) #_(take 7 squares)))))))))
+         (time (count (reduce +' (map (comp unwrap padfn) (flatten (map #(map (partial helpfn % 18) digits) (range 4 5) #_(take 7 squares)))))))
+         (time (count (reduce +' (sort (map unwrap (flatten (flatten (def foo (map #(map (partial helpfn % 18) digits) (range 4 5) #_(take 7 squares))))))))))
          (time (count (reduce +' (sort (count (map unwrap (flatten (map #(map (partial helpfn %) digits) [16] #_(take 3 squares)))))))))
          (time (count (map zero-padded-variants (take 250 (map unwrap (flatten (map #(map (partial helpfn %) digits) squares)))))))
          )
