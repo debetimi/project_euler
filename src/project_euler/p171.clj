@@ -43,42 +43,42 @@
   (map ->Summands ((comp permutations :summands) (first (drop-while #(> max-digits (len %)) (iterate pad summand))))))
 
 (defn collector [max-digits] 
-  (let [h (fn helper [v sq]
+  (let [h (fn helper [v d sq]
+            (println "loop" v d sq)
             (let [remaining (- v sq)]
               (cond (contains? @cache [v sq]) (get @cache [v sq]) 
                     (neg? remaining) [] 
-                    (zero? remaining) (get (swap! cache assoc [v sq] [(->Summands [(sqrt v)])
-                                                                      #_(->Summands [0 (sqrt v)])
-                                                                      (pad (->Summands [(sqrt v)]))
-                                                                      ])
-                                           [v sq])
-                    :else (let [cached (filter #(contains? @cache [remaining %])
-                                               (take-while #(and (>= sq sq) (>= remaining %))
-                                                           (map square (range 1 10))))
-                                uncached (take-while #(and (>= sq sq) (>= remaining %)) 
-                                                     (remove (set cached) (map square (range 1 10))))
-                                #_(println "UNCACHED" uncached "SQUARE" sq)
+                    (neg? d) []
+                    (and (zero? d) (zero? remaining))(do (println "doing summand")[(->Summands [(sqrt v)])]) 
+                    :else (let [cached (filter #(contains? @cache [remaining %]) (take-while (partial >= remaining) (map square (range 0 10))))
+                                uncached (take-while (partial >= remaining) (remove (set cached) (map square (range 0 10))))
+                                _ (println "uncached" uncached)
                                 cached-base (mapcat #(get @cache [remaining %]) cached) 
-                                base (mapcat (partial helper remaining) uncached)
+                                _ (println "cached-base" cached-base)
+                                base (mapcat (partial helper remaining (dec d)) (reverse uncached))
+                                _ (println "base" base)
                                 base2 (concat cached-base base)
-                                #_(println "BASE " base)
-                                #_(println "BASE 2 " base2)
+                                _ (println "base2" base2)
+                                _ (println "filtered" (filter #(>= max-digits (len %)) (map #(add % sq) (map reprotect base2))))
+                                baz (filter #(>= max-digits (len %)) (map #(add % sq) (map reprotect base2))) 
+                                _ (println "baz" baz)
                                 ]
-                            (get (swap! cache assoc [v sq] (filter #(> max-digits (len %)) (concat (map #(add % sq) (map reprotect base2))
-                                                                                                   (map #(add (add % sq) 0) (map reprotect base2))
-                                                                                                   (map #(add (add % 0) sq) (map reprotect base2))
-                                                                                                   )))
-                                 [v sq])))))]
+                            (when (not= 0 sq) (swap! cache assoc [v sq] baz))
+                            baz
+                            #_(get (swap! cache assoc [v sq] (filter #(>= max-digits (len %)) (map #(add % sq) (map reprotect base2))))
+                                 [v sq])))))
+        
+        ]
     h))
 
 (comment (do (def squares (possible-squares 1e20))
-             (def digits (map square (range 1 10)))
+             (def digits (map square (range 1 2)))
              (def cache (atom {}))
              (def helpfn (collector (max-digits 1e20)))
              (def padfn (partial zero-padded-variants (max-digits 1e20))))
          (map #(helpfn % 25) (range 1 55))
          (time (count (reduce +' (map unwrap (flatten (map padfn (flatten (map #(map (partial helpfn %) digits) squares))))))))
-         (time (count (reduce +' (sort (map unwrap (flatten (map #(map (partial helpfn %) digits) (range 9 10) #_(take 7 squares))))))))
+         (time (count (reduce +' (sort (map unwrap (flatten (def foo (map #(map (partial helpfn % 18) digits) (range 4 5) #_(take 7 squares)))))))))
          (time (count (reduce +' (sort (count (map unwrap (flatten (map #(map (partial helpfn %) digits) [16] #_(take 3 squares)))))))))
          (time (count (map zero-padded-variants (take 250 (map unwrap (flatten (map #(map (partial helpfn %) digits) squares)))))))
          )
