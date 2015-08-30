@@ -16,4 +16,4 @@
   (some? (first (filter #(integer? (sqrt (/ (- n %) 2))) (take-while (partial >= n) lazy-primes)))))
 
 (defn solve []
-  (first (drop-while goldbach? (filter (complement prime?) (map #(+ 33 (* 2 %)) (range))))))
+  (first (filter (every-pred (complement goldbach?) (complement prime?)) (map #(+ 33 (* 2 %)) (range)))))
